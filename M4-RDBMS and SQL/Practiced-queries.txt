@@ -1,0 +1,431 @@
+CREATE TABLE EMP
+(EMPNO int NOT NULL,
+ENAME VARCHAR(10),
+JOB VARCHAR(9),
+MGR int,
+HIREDATE DATE,
+SAL decimal(7,2),
+COMM int,
+DEPTNO int);
+
+
+INSERT INTO EMP VALUES
+(7369, 'SMITH', 'CLERK', 7902,'1980-12-17', 800, NULL, 20);
+INSERT INTO EMP VALUES
+(7499, 'ALLEN', 'SALESMAN', 7698, '1981-02-20',1600, 300, 30);
+
+INSERT INTO EMP VALUES
+(7521, 'WARD', 'SALESMAN', 7698,'1981-02-22', 1250, 500, 30);
+
+INSERT INTO EMP VALUES
+(7566, 'JONES', 'MANAGER', 7839,'1981-04-02', 2975, NULL, 20);
+
+INSERT INTO EMP VALUES
+(7654, 'MARTIN', 'SALESMAN', 7698,'1981-09-28', 1250, 1400, 30);
+
+INSERT INTO EMP VALUES
+(7698, 'BLAKE', 'MANAGER', 7839,'1981-05-01', 2850, NULL, 30);
+
+INSERT INTO EMP VALUES
+(7782, 'CLARK', 'MANAGER', 7839,'1981-06-09',2450, NULL, 10);
+
+INSERT INTO EMP VALUES
+(7788, 'SCOTT', 'ANALYST', 7566,'1982-12-09',3000, NULL, 20);
+
+INSERT INTO EMP VALUES
+(7839, 'KING', 'PRESIDENT', NULL,'1981-11-17', 5000, NULL, 10);
+
+INSERT INTO EMP VALUES
+(7844, 'TURNER', 'SALESMAN', 7698,'1981-09-08', 1500, 0, 30);
+
+INSERT INTO EMP VALUES
+(7876, 'ADAMS', 'CLERK', 7788,'1983-01-12', 1100, NULL, 20);
+
+INSERT INTO EMP VALUES
+(7900, 'JAMES', 'CLERK', 7698,'1981-12-03', 950, NULL, 30);
+
+INSERT INTO EMP VALUES
+(7902, 'FORD', 'ANALYST', 7566,'1981-12-03', 3000, NULL, 20);
+
+INSERT INTO EMP VALUES
+(7934, 'MILLER', 'CLERK',7782, '1982-01-23 ', 1300, NULL, 10);
+
+
+
+
+CREATE TABLE DEPT
+(DEPTNO int,
+DNAME VARCHAR(14),
+LOC VARCHAR(13) );
+
+INSERT INTO DEPT VALUES (10, 'ACCOUNTING', 'NEW YORK');
+INSERT INTO DEPT VALUES (20, 'RESEARCH', 'DALLAS');
+INSERT INTO DEPT VALUES (30, 'SALES', 'CHICAGO');
+INSERT INTO DEPT VALUES (40, 'OPERATIONS', 'BOSTON');
+
+
+
+CREATE TABLE BONUS
+(ENAME VARCHAR(10),
+JOB VARCHAR(9),
+SAL int,
+COMM int);
+
+CREATE TABLE SALGRADE
+(GRADE int,
+LOSAL int,
+HISAL int);
+
+INSERT INTO SALGRADE VALUES (1, 700, 1200);
+INSERT INTO SALGRADE VALUES (2, 1201, 1400);
+INSERT INTO SALGRADE VALUES (3, 1401, 2000);
+INSERT INTO SALGRADE VALUES (4, 2001, 3000);
+INSERT INTO SALGRADE VALUES (5, 3001, 9999);
+
+show tables;
+desc emp;
+select *from emp;
+select empno, ename "NAmr" from emp;
+select empno, ename,sal,sal+7777 AS "BONUS" from emp;
+select distinct job,sal from emp;
+select job,sal,ename from emp where  job="clerk" order by ename;
+select ename, sal from emp where comm is null or sal in(2000,800);
+select mod(1600,4);
+select 200 mod 3;
+select 4%2;
+select curdate(),current_date();
+select current_timestamp();
+select dayname('2024-04-04');
+select locate("my","India is my country");
+select repeat("mysql",3);
+
+select substring('Hello India',2 ,4);
+select round(15.56,0);
+select round(15.56,1);
+select round(15.56,2);
+select round(15.56,3);
+select round(789.2,-3);
+select truncate(115.56,-2);
+show tables;
+describe information_schema.tables;
+describe information_schema.columns;
+describe information_schema.processlist;
+
+select * from information_schema.tables where table_schema="information_schema";
+select * from information_schema.columns;
+select user,host,db,command,time,state,info from information_schema.processlist;
+
+select table_name,column_name from information_schema.columns where table_name="EMP";
+describe performance_schema.users;
+select * from  performance_schema.users;
+select table_name from performance_schema.tables where table_schema="performance_schema";
+
+select * from information_schema.tables;
+select job,deptno from emp group by job,deptno;
+
+select max(sal),job,ename,deptno from emp group by deptno;
+
+select max(sal) from emp where sal>2400 group by deptno having max(sal)>3000; 
+
+
+
+
+
+select count(job),deptno,job from emp group by job,deptno;
+
+
+select sum(sal),year(hiredate) from emp group by year(hiredate);
+
+select count(deptno),deptno  from emp group by deptno  ;
+
+
+select sum(sal),job from emp group by job; 
+
+select count(year(hiredate)),year(hiredate) from emp group by year(hiredate); 
+
+
+select count(mgr),mgr from emp group by mgr;
+
+
+select e.empno,e.ename,e.job,d.deptno,d.dname from emp e right outer join dept d
+ON e.deptno=d.deptno;
+select e.empno,e.ename,e.job,d.deptno,d.dname from emp e left outer join dept d
+ON e.deptno=d.deptno;
+
+select m.ename Manager, e.ename Employee from emp e join emp m on e.mgr=m.empno;
+
+select e.empno,e.ename,e.job,d.deptno,d.dname from emp e cross join dept d;
+;
+
+select * from dept;
+select e.empno,e.ename,e.job,d.deptno,d.dname from emp e inner join dept d
+ ON e.deptno=d.deptno;
+ 
+ 
+ select e.ename,m.ename  from emp e join emp m on e.mgr=m.empno;
+ select * from dept;
+ select * from emp;
+ select d.dname from dept d left  join emp e on e.deptno=d.deptno where e.ename is null;
+ 
+ select d.dname,sum(e.sal) from emp e join dept d on e.dname=d.dname group by d.dname;
+ select e.ename ,e.job, d.dname from emp e join dept d on e.deptno=d.deptno;  
+ 
+ 
+ 
+ create table product(pid int, pname varchar(20));
+insert into product values(1, "Book");
+insert into product values(2, "Mobile");
+insert into product values(3, "Laptop");
+insert into product values(4, "Toy");
+select * from products;
+truncate table product;
+rename table product to products;
+
+drop table products;
+ 
+select * from product;
+ 
+create table customer(custid int, cname varchar(20), address varchar(20) default "Bangalore",
+puramt decimal(5,2), dob date);
+ 
+insert into customer values(11, "Akash","Bangalore", 250.00, "1994-05-23");
+insert into customer(custid,cname,address, dob) values(12, "Ravi","Bangalore", "1985-05-22");
+insert into customer values(13, "Bala","Bangalore", 650.00, "1992-06-21");
+insert into customer values(14, "Cathy","Pune", 350.00, "1999-12-02");
+insert into customer values(15, "David","Chennai", 450.00, "2001-01-14");
+insert into customer values(16, "Elsa","Chennai", 700.00, "1987-07-05");
+insert into customer(custid,cname, puramt,dob) values(17, "Fathima", 950.00, "1983-09-23");
+insert into customer values(17, "Ganesh","Bangalore", 800.00, "1977-10-23");
+ 
+select * from customer;
+describe customer;
+SET SQL_SAFE_UPDATES=0;
+
+
+ 
+ 
+ 
+ 
+update customer set custid=18 where cname="Ganesh";
+delete from customer where custid=18;
+
+alter table customer add phone bigint;
+alter table customer modify phone int;
+alter table customer drop phone;
+
+alter table customer rename column dob to DOB;
+
+
+
+
+
+
+create table product1(pid int primary key, pname varchar(20),cid int,
+
+constraint cid_fk foreign key(cid) references customer1(custid));
+
+insert into product1 values(1, "Book",11);
+
+insert into product1 values(2, "Mobile",12);
+
+insert into product1 values(3, "Laptop",13);
+
+insert into product1 values(4, "Toy",14);
+ 
+select * from product1 ;
+ 
+drop table product;
+
+drop table customer;
+
+truncate table product;
+
+create table customer1(custid int, cname varchar(20) not null, address varchar(20) default "Bangalore",
+
+puramt decimal(5,2), dob date, phone int unique,
+
+constraint cust_pk primary key(custid),
+
+constraint cust__puramt_ck check(puramt >99));
+ 
+insert into customer1 values(11, "Akash","Bangalore", 250.00, "1994-05-23", 987456);
+
+insert into customer1(custid,cname,address, dob) values(12, "Ravi","Bangalore", "1985-05-22");
+
+insert into customer1 values(13, "Bala","Bangalore", 650.00, "1992-06-21", 852963);
+
+insert into customer1(custid,cname,address,puramt, dob,phone) values(14, "Cathy","Pune", 350.00, "1999-12-02",987453);
+
+insert into customer1(custid,address,puramt, dob) values(15, "Chennai", 450.00, "2001-01-14");
+
+insert into customer1(custid,cname, address,puramt, dob) values(16, "Elsa","Chennai", 77.00, "1987-07-05");
+
+insert into customer1(custid,cname, puramt,dob) values(17, "Fathima", 950.00, "1983-09-23");
+
+insert into customer1 values(17, "Ganesh","Bangalore", 800.00, "1977-10-23");
+ desc information_schema.table_constraints;
+select * from customer1;
+
+
+select table_schema, constraint_name,constraint_type  from information_schema.table_constraints where table_name="customer1";
+
+
+
+create table customers (
+    customer_id int primary key,
+    customer_name varchar(50),
+    customer_email varchar(50)
+);
+ 
+ 
+insert into customers values
+(1, 'asha', 'asha@gmail.com'),
+(2, 'malar', 'malar@gmail.com'),
+(3, 'manish', 'manish@gmail.com'),
+(4, 'divya', 'divya@gmail.com'),
+(5, 'girish', 'girish@gmail.com'),
+(6, 'deepak', 'deepak@gmail.com');
+ 
+ 
+create table products (
+    product_id int primary key,
+    product_name varchar(50),
+    product_price decimal(10, 2)
+);
+ 
+-- insert sample data into product table
+insert into products values
+(101, 'laptop', 50000.99),
+(102, 'smartphone', 15000.99),
+(103, 'headphones',1000.99),
+(104, 'tablet', 12000.99),
+(105, 'wireless mouse', 800.99);
+ 
+ 
+create table orders (
+    order_id int primary key,
+    customer_id int,
+    product_id int,
+    quantity int,
+    order_date date,
+    foreign key (customer_id) references customers(customer_id),
+    foreign key (product_id) references products(product_id)
+);
+ 
+ 
+insert into orders values
+(1, 1, 101, 2, '2024-01-01'),
+(2, 2, 102, 1, '2024-01-02'),
+(3, 3, 103, 3, '2024-01-03'),
+(4, 1, 104, 1, '2024-01-04'),
+(5, 2, 105, 2, '2024-01-05'),
+(6, 4, 101, 1, '2024-01-06'),
+(7, 5, 102, 3, '2024-01-07');
+ 
+select * from customers;
+select * from products;
+select * from orders;
+
+
+select c.customer_name
+from customers c
+join orders o on c.customer_id = o.customer_id
+join products p on o.product_id = p.product_id
+where p.product_price = (select MAX(product_price) from products);
+
+select customer_name from customers	c where not exists	(select customer_id from orders	o	where	 o.customer_id=c.customer_id);
+
+select o.order_id,o.customer_id,o.product_id,o.quantity,o.order_date from orders o
+join customers c on o.customer_id=c.customer_id
+join products p on o.product_id=p.product_id;
+
+
+select count(o.order_id),p.product_name as "total orders" from orders o
+join products p on p.product_id =o.product_id
+group by p.product_id;
+
+
+
+select c.customer_name from orders o
+join products p on p.product_id =o.product_id
+join customers c on c.customer_id=o.customer_id where p.pname="laptop";
+
+select c.customer_id,c.customer_name,sum(o.quantity*p.product_price) as expenditure 
+from orders o 
+join products p on o.product_id=p.product_id
+join customers c on o.customer_id=c.customer_id
+group by c.customer_id,c.customer_name 
+order by expenditure desc limit 1;
+
+
+select c.customer_id,c.customer_name,sum(o.quantity*p.product_price) as expenditure 
+from orders o 
+join products p on o.product_id=p.product_id
+join customers c on o.customer_id=c.customer_id
+group by c.customer_id,c.customer_name 
+order by expenditure asc limit 1;
+
+use training;
+
+select c.customer_id,c.customer_name,sum(o.quantity*p.product_price) as expenditure 
+from orders o 
+join products p on o.product_id=p.product_id
+right outer join customers c on o.customer_id=c.customer_id
+where expenditure is null;
+select ename,sal from emp where sal>(select sal from emp where ename="allen");
+select ename from emp where sal=(select max(sal) from emp where sal not in(select max(sal) from emp)) ;
+
+select dname from dept d
+where exists (select sal from emp e where d.deptno=e.deptno);
+
+select e.deptno from emp e
+union 
+select d.deptno from dept d;
+
+select e.deptno from emp e;
+
+select d.deptno from dept d;
+
+select d.deptno from dept d ;
+
+select e.deptno from emp e ;
+
+
+select empno,ename,deptno,
+case
+when  deptno=10 then "hr"
+when  deptno=20 then "hrj"
+when  deptno=30 then "hri"
+end as deppp
+from emp;
+
+
+select empno,ename,deptno,
+if(deptno=10,"hr",if(deptno=20,"hri",if(deptno=30,"hrj","oo")))  as deppp from emp;
+
+
+
+grant ALL privileges ON training to 'vineet'@'localhost';
+
+create user 'vineeet'@'localhost' identified by "Asdfghjkl";
+
+
+
+select sal,comm, sum(sal+ifnull(comm,0)) over() as totalsum from emp;
+ 
+
+select * from emp order by deptno asc;
+select sal,comm, sum(sal+ifnull(comm,0)) over(partition by deptno order by sal) as totalsum from emp;
+ 
+select sal,comm,deptno, row_number() over(partition by deptno order by sal) as "Row number" from emp;
+select empno,ename, deptno, sal,comm, RANK() over(partition by deptno order by sal desc) as deptrank from emp;
+select empno,ename, deptno, sal,comm, DENSE_RANK() over(partition by deptno order by sal desc) as deptrank from emp;
+
+
+select empno,ename,deptno,hiredate ,sal, 
+LAST_VALUE(sal) over(partition by deptno order by hiredate ROWS BETWEEN unbounded PRECEDING AND unbounded FOLLOWING) PrevSalaryIntheList from emp;
+ 
+select empno,ename,deptno,hiredate ,sal, 
+LAST_VALUE(sal) over(partition by deptno order by hiredate ROWS BETWEEN 1 PRECEDING AND 1 FOLLOWING) PrevSalaryIntheList from emp;
+ 
+ 
